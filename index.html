@@ -18,6 +18,7 @@
             --text-color: #333;
             --shadow: 0 15px 35px rgba(0,0,0,0.12);
             --sweet-color: #fcc419;
+            --nav-bg: rgba(255, 255, 255, 0.9);
         }
 
         * {
@@ -28,7 +29,6 @@
         }
 
         body {
-            /* 3. Decorative Background (Mesh Gradient) */
             background-color: #e0eafc;
             background-image: 
                 radial-gradient(at 0% 0%, hsla(218,100%,95%,1) 0, transparent 50%), 
@@ -39,8 +39,8 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: flex-start; /* Better for scrolling on mobile */
+            padding: 20px 20px 100px 20px; /* Space for bottom nav */
         }
 
         .container {
@@ -48,13 +48,23 @@
             backdrop-filter: blur(10px);
             width: 100%;
             max-width: 480px;
-            padding: 45px 35px;
+            padding: 40px 30px;
             border-radius: 32px;
             box-shadow: var(--shadow);
             text-align: center;
             position: relative;
-            overflow: hidden;
             border: 1px solid rgba(255,255,255,0.3);
+            display: none; /* Controlled by JS */
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .logo-container {
@@ -62,7 +72,7 @@
             align-items: center;
             justify-content: center;
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .logo-img {
             max-width: 180px;
@@ -74,14 +84,6 @@
             font-size: 28px;
             font-weight: 600;
             color: #666;
-            margin: 0 5px;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 8px;
-            font-size: 32px;
-            font-weight: 600;
         }
 
         p.subtitle {
@@ -90,7 +92,6 @@
             font-size: 15px;
         }
 
-        /* 5. Sweet Spot Highlight */
         #sweet-spot-badge {
             display: none;
             background: var(--sweet-color);
@@ -109,13 +110,12 @@
         }
 
         .input-group {
-            margin-bottom: 25px;
-            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         label {
             display: block;
-            text-align: left;
             margin-bottom: 8px;
             color: var(--text-color);
             font-weight: 500;
@@ -124,10 +124,10 @@
 
         input[type="number"] {
             width: 100%;
-            padding: 18px 25px;
-            font-size: 32px;
+            padding: 15px 20px;
+            font-size: 24px;
             border: 2.5px solid #eee;
-            border-radius: 20px;
+            border-radius: 18px;
             outline: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
@@ -139,7 +139,6 @@
         input[type="number"]:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 5px rgba(0, 71, 186, 0.1);
-            transform: scale(1.02);
         }
 
         .results {
@@ -150,42 +149,35 @@
         }
 
         .card {
-            padding: 25px 15px;
+            padding: 20px 15px;
             border-radius: 20px;
             color: white;
-            transition: all 0.3s;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+            gap: 8px;
         }
 
         .card-user { background: var(--user-color); }
         .card-govt { background: var(--govt-color); }
+        .card-wallet { background: linear-gradient(135deg, #ff4b2b, #ff416c); }
 
         .card-icon {
             background: rgba(255, 255, 255, 0.25);
-            width: 52px;
-            height: 52px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .card-title { font-size: 13px; opacity: 0.9; }
-        .card-value { font-size: 24px; font-weight: 600; }
+        .card-title { font-size: 12px; opacity: 0.9; }
+        .card-value { font-size: 22px; font-weight: 600; }
 
-        /* 1. Progress Bar (Daily Cap) */
         .progress-container {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-align: left;
         }
         .progress-label {
@@ -205,17 +197,15 @@
             height: 100%;
             background: var(--govt-color);
             width: 0%;
-            transition: width 0.5s ease-out, background 0.3s;
+            transition: width 0.5s ease-out;
         }
-        .progress-bar-fill.capped {
-            background: var(--accent-color);
-        }
+        .progress-bar-fill.capped { background: var(--accent-color); }
 
         .total-section {
             background: var(--secondary-color);
             padding: 20px;
             border-radius: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .total-row {
@@ -228,9 +218,9 @@
 
         .total-row.main {
             border-top: 1.5px dashed #ccc;
-            padding-top: 15px;
-            margin-top: 12px;
-            font-size: 20px;
+            padding-top: 12px;
+            margin-top: 10px;
+            font-size: 18px;
             font-weight: 600;
             color: var(--text-color);
         }
@@ -243,128 +233,303 @@
             border-radius: 16px;
             border-left: 5px solid #ffe58f;
             text-align: left;
-            margin-bottom: 20px;
         }
 
-        .footer {
-            margin-top: 30px;
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 400px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #999;
+            text-decoration: none;
+            font-size: 11px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item i {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Result Animation */
+        .highlight-value {
+            color: var(--accent-color);
+            font-size: 32px;
+            font-weight: 700;
+            margin: 10px 0;
+            display: block;
+        }
+
+        /* Help Button & Modal */
+        .help-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #666;
+            z-index: 10;
+        }
+        .help-btn:hover { background: rgba(0, 0, 0, 0.1); }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 24px;
+            max-width: 400px;
+            width: 100%;
+            text-align: left;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: modalScale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modalScale {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal h2 { color: var(--primary-color); margin-bottom: 15px; font-size: 20px; display: flex; align-items: center; gap: 10px; }
+        .modal ul { list-style: none; }
+        .modal li { margin-bottom: 12px; font-size: 14px; color: #444; display: flex; align-items: flex-start; gap: 10px; }
+        .modal li i { color: var(--govt-color); flex-shrink: 0; width: 18px; margin-top: 2px; }
+        .close-modal {
+            margin-top: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Help Hint Bubble */
+        .help-hint {
+            position: absolute;
+            top: 15px;
+            right: 60px;
+            background: var(--accent-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 12px;
             font-size: 12px;
-            color: #aaa;
+            font-weight: 500;
+            white-space: nowrap;
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.3);
+            animation: pointLeft 1s infinite;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-
-        /* Hide arrows in input number */
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        .help-hint::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 5px 0 5px 8px;
+            border-style: solid;
+            border-color: transparent transparent transparent var(--accent-color);
+        }
+        @keyframes pointLeft {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
         }
 
         @media (max-width: 480px) {
-            .container { 
-                padding: 30px 15px; 
-                border-radius: 24px;
-            }
-            .logo-img {
-                max-width: 120px;
-                max-height: 90px;
-            }
-            .logo-divider {
-                font-size: 20px;
-            }
-            h1 { font-size: 24px; }
-            .card-value { font-size: 19px; }
-            input[type="number"] {
-                font-size: 26px;
-                padding: 15px;
-            }
-            .results {
-                gap: 10px;
-            }
-            .card {
-                padding: 15px 10px;
-            }
-        }
-
-        @media (max-width: 350px) {
-            .logo-container {
-                gap: 10px;
-            }
-            .logo-img {
-                max-width: 100px;
-            }
-            .results {
-                grid-template-columns: 1fr; /* Stack on extremely small screens */
-            }
+            .container { padding: 30px 20px; }
+            .logo-img { max-width: 140px; }
+            input[type="number"] { font-size: 22px; }
+            .card-value { font-size: 20px; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="sweet-spot-badge">✨ จุดที่คุ้มที่สุด! รัฐช่วยเต็ม 200 บาทพอดี ✨</div>
-    <div class="logo-container">
-        <img src="img/ร้านไข่ทอง1.png" alt="ร้านไข่ทอง Logo" class="logo-img">
-        <div class="logo-divider">X</div>
-        <img src="img/ไทยช่วยไทย.png" alt="ไทยช่วยไทย Logo" class="logo-img">
-    </div>
-    <p class="subtitle">คำนวณส่วนต่าง รัฐจ่ายให้-เราจ่ายเอง</p>
-
-    <div class="input-group">
-        <label for="price">ราคาสินค้า (บาท)</label>
-        <input type="number" id="price" placeholder="0.00" min="0" step="0.01" autofocus>
-    </div>
-
-    <div class="results">
-        <div class="card card-user">
-            <div class="card-icon"><i data-lucide="user"></i></div>
-            <div class="card-title">คุณจ่ายเอง (40%)</div>
-            <div class="card-value" id="user-pay">0.00</div>
-        </div>
-        <div class="card card-govt">
-            <div class="card-icon"><i data-lucide="landmark"></i></div>
-            <div class="card-title">รัฐช่วยจ่าย (60%)</div>
-            <div class="card-value" id="govt-pay">0.00</div>
+    <!-- Instruction Modal -->
+    <div id="help-modal" class="modal-overlay">
+        <div class="modal">
+            <h2 id="modal-title"></h2>
+            <ul id="modal-list"></ul>
+            <button class="close-modal" onclick="closeHelp()">รับทราบ</button>
         </div>
     </div>
 
-    <!-- 1. Progress Bar -->
-    <div class="progress-container">
-        <div class="progress-label">
-            <span>วงเงินรัฐช่วยต่อวัน (สูงสุด 200.-)</span>
-            <span id="progress-percent">0%</span>
+    <!-- Page 1: Calculator -->
+    <div id="page-calc" class="container active">
+        <div id="help-hint-calc" class="help-hint">
+            <span>ทำไม่เป็นกดตรงนี้</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
         </div>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="bar-fill"></div>
+        <div class="help-btn" onclick="openHelp('calc')">
+            <i data-lucide="help-circle"></i>
+        </div>
+        <div id="sweet-spot-badge">✨ จุดที่คุ้มที่สุด! รัฐช่วยเต็ม 200 บาทพอดี ✨</div>
+        <div class="logo-container">
+            <img src="img/ร้านไข่ทอง1.png" alt="ร้านไข่ทอง Logo" class="logo-img">
+            <div class="logo-divider">X</div>
+            <img src="img/ไทยช่วยไทย.png" alt="ไทยช่วยไทย Logo" class="logo-img">
+        </div>
+        <p class="subtitle">คำนวณส่วนต่าง รัฐจ่ายให้-เราจ่ายเอง</p>
+
+        <div class="input-group">
+            <label for="price">ราคาสินค้า (บาท)</label>
+            <input type="number" id="price" placeholder="0.00" min="0" step="0.01">
+        </div>
+
+        <div class="results">
+            <div class="card card-user">
+                <div class="card-icon"><i data-lucide="user"></i></div>
+                <div class="card-title">คุณจ่ายเอง (40%)</div>
+                <div class="card-value" id="user-pay">0.00</div>
+            </div>
+            <div class="card card-govt">
+                <div class="card-icon"><i data-lucide="landmark"></i></div>
+                <div class="card-title">รัฐช่วยจ่าย (60%)</div>
+                <div class="card-value" id="govt-pay">0.00</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-label">
+                <span>วงเงินรัฐช่วยต่อวัน (สูงสุด 200.-)</span>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="bar-fill"></div>
+            </div>
+        </div>
+
+        <div class="total-section">
+            <div class="total-row"><span>สัดส่วน 60% (รัฐช่วย):</span><span id="calc-60">0.00</span></div>
+            <div class="total-row"><span>สัดส่วน 40% (เราจ่าย):</span><span id="calc-40">0.00</span></div>
+            <div class="total-row main"><span>รวมยอดทั้งหมด:</span><span id="total-val">0.00</span></div>
+        </div>
+
+        <div class="info-box">
+            รัฐช่วยสนับสนุน 60% ของราคาสินค้า แต่สูงสุดไม่เกิน <strong>200 บาท ต่อวัน</strong>
         </div>
     </div>
 
-    <div class="total-section">
-        <div class="total-row">
-            <span>สัดส่วน 60% (รัฐช่วย):</span>
-            <span id="calc-60">0.00</span>
+    <!-- Page 2: G-Wallet -->
+    <div id="page-wallet" class="container">
+        <div id="help-hint-wallet" class="help-hint">
+            <span>ทำไม่เป็นกดตรงนี้</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
         </div>
-        <div class="total-row">
-            <span>สัดส่วน 40% (เราจ่าย):</span>
-            <span id="calc-40">0.00</span>
+        <div class="help-btn" onclick="openHelp('wallet')">
+            <i data-lucide="help-circle"></i>
         </div>
-        <div class="total-row main">
-            <span>รวมยอดทั้งหมด:</span>
-            <span id="total-val">0.00</span>
+        <div class="logo-container">
+            <img src="img/ร้านไข่ทอง1.png" alt="ร้านไข่ทอง Logo" class="logo-img">
+            <div class="logo-divider">X</div>
+            <img src="img/ไทยช่วยไทย.png" alt="ไทยช่วยไทย Logo" class="logo-img">
+        </div>
+        <p class="subtitle">คำนวณยอดเงินที่ต้องเติมเข้าแอปเป๋าตัง</p>
+
+        <div class="input-group">
+            <label for="wallet-price">ราคาสินค้าที่จะซื้อ (บาท)</label>
+            <input type="number" id="wallet-price" placeholder="0.00">
+        </div>
+
+        <div class="input-group">
+            <label for="remain-limit">สิทธิรัฐช่วยที่เหลือของคุณ (บาท)</label>
+            <input type="number" id="remain-limit" value="200" placeholder="สูงสุด 200">
+        </div>
+
+        <div class="card card-wallet" style="width: 100%; margin-bottom: 25px; padding: 30px;">
+            <div class="card-icon" style="background: rgba(255,255,255,0.3); width: 60px; height: 60px;">
+                <i data-lucide="wallet" style="width: 32px; height: 32px;"></i>
+            </div>
+            <div class="card-title" style="font-size: 16px; margin-top: 10px;">ยอดที่ต้องเติมเข้า G-Wallet</div>
+            <div id="wallet-result" class="highlight-value" style="color: white; margin: 5px 0;">0.00</div>
+            <div style="font-size: 12px; opacity: 0.8;">*ยอดนี้รวมส่วน 40% และส่วนเกินที่รัฐไม่ช่วยแล้ว</div>
+        </div>
+
+        <div class="total-section">
+            <div class="total-row"><span>ราคาเต็ม:</span><span id="w-total">0.00</span></div>
+            <div class="total-row"><span>รัฐช่วยจ่ายจริง:</span><span id="w-govt" style="color: var(--govt-color); font-weight: 600;">0.00</span></div>
+            <div class="total-row main"><span>คุณต้องจ่ายเองทั้งหมด:</span><span id="w-final">0.00</span></div>
+        </div>
+
+        <div class="info-box" style="background: #e6f7ff; border-left-color: #1890ff;">
+            <strong>สูตรคำนวณ:</strong> เราจะคำนวณจาก (ราคาสินค้า - ยอดที่รัฐช่วยจริง) โดยยอดที่รัฐช่วยจริงจะอิงตามสิทธิที่เหลือและเพดาน 200 บาท/วัน
         </div>
     </div>
 
-    <div class="info-box">
-        รัฐช่วยสนับสนุน 60% ของราคาสินค้า แต่สูงสุดไม่เกิน <strong>200 บาท ต่อวัน</strong>
+    <!-- Navigation Bar -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showPage('calc')">
+            <i data-lucide="calculator"></i>
+            <span>เช็กสัดส่วนจ่าย</span>
+        </div>
+        <div class="nav-item" onclick="showPage('wallet')">
+            <i data-lucide="wallet"></i>
+            <span>ยอดเติมเป๋าตัง</span>
+        </div>
     </div>
-
-    <div class="footer">
-        ออกแบบเพื่อความสะดวกในการใช้งาน
-    </div>
-</div>
 
 <script>
-    // Initialize Lucide icons
     lucide.createIcons();
 
+    // Page Switching Logic
+    function showPage(pageId) {
+        document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        
+        document.getElementById('page-' + pageId).classList.add('active');
+        const navIndex = pageId === 'calc' ? 0 : 1;
+        document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    // --- Page 1 Logic ---
     const priceInput = document.getElementById('price');
     const userPayEl = document.getElementById('user-pay');
     const govtPayEl = document.getElementById('govt-pay');
@@ -375,73 +540,119 @@
     const progressPercent = document.getElementById('progress-percent');
     const sweetSpotBadge = document.getElementById('sweet-spot-badge');
 
-    let currentPrice = 0;
     let targetValues = { user: 0, govt: 0, c60: 0, c40: 0, total: 0 };
     let displayedValues = { user: 0, govt: 0, c60: 0, c40: 0, total: 0 };
 
-    // 2. Number Animation Logic
     function animate() {
-        const speed = 0.15; // Animation speed
-        
+        const speed = 0.2;
         for (let key in targetValues) {
             const diff = targetValues[key] - displayedValues[key];
-            if (Math.abs(diff) > 0.01) {
-                displayedValues[key] += diff * speed;
-            } else {
-                displayedValues[key] = targetValues[key];
-            }
+            if (Math.abs(diff) > 0.01) displayedValues[key] += diff * speed;
+            else displayedValues[key] = targetValues[key];
         }
-
         userPayEl.textContent = displayedValues.user.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         govtPayEl.textContent = displayedValues.govt.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         calc60El.textContent = displayedValues.c60.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         calc40El.textContent = displayedValues.c40.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         totalValEl.textContent = displayedValues.total.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
         requestAnimationFrame(animate);
     }
-    requestAnimationFrame(animate);
+    animate();
 
     priceInput.addEventListener('input', function() {
         const price = parseFloat(this.value) || 0;
-        const GOVT_PERCENT = 0.6;
-        const DAILY_CAP = 200;
-
-        let govtShare = price * GOVT_PERCENT;
-        
-        // 1. Progress Bar Calculation
-        let percent = (govtShare / DAILY_CAP) * 100;
+        let govtShare = price * 0.6;
+        let percent = (govtShare / 200) * 100;
         if (percent > 100) percent = 100;
         barFill.style.width = percent + '%';
         progressPercent.textContent = Math.round(percent) + '%';
-        
-        if (percent >= 100) {
-            barFill.classList.add('capped');
-        } else {
-            barFill.classList.remove('capped');
-        }
+        barFill.classList.toggle('capped', percent >= 100);
 
-        // Apply daily cap
-        if (govtShare > DAILY_CAP) {
-            govtShare = DAILY_CAP;
-        }
-
+        if (govtShare > 200) govtShare = 200;
         const userShare = price - govtShare;
 
-        // Set target values for animation
-        targetValues.user = userShare;
-        targetValues.govt = govtShare;
-        targetValues.c60 = price * 0.6;
-        targetValues.c40 = price * 0.4;
-        targetValues.total = price;
-
-        // 5. Sweet Spot Highlight (333.33)
-        if (price >= 333.30 && price <= 333.40) {
-            sweetSpotBadge.style.display = 'block';
-        } else {
-            sweetSpotBadge.style.display = 'none';
-        }
+        targetValues = { user: userShare, govt: govtShare, c60: price * 0.6, c40: price * 0.4, total: price };
+        sweetSpotBadge.style.display = (price >= 333.30 && price <= 333.40) ? 'block' : 'none';
     });
+
+    // --- Page 2 Logic ---
+    const walletPriceInput = document.getElementById('wallet-price');
+    const remainLimitInput = document.getElementById('remain-limit');
+    const walletResultEl = document.getElementById('wallet-result');
+    const wTotalEl = document.getElementById('w-total');
+    const wGovtEl = document.getElementById('w-govt');
+    const wFinalEl = document.getElementById('w-final');
+
+    function calculateWallet() {
+        const price = parseFloat(walletPriceInput.value) || 0;
+        const remainLimit = parseFloat(remainLimitInput.value) || 0;
+        
+        // 1. Calculate how much govt SHOULD pay (60% up to 200/day)
+        let govtCanPay = price * 0.6;
+        if (govtCanPay > 200) govtCanPay = 200;
+        
+        // 2. But cannot exceed what user actually has left in monthly limit
+        let actualGovtPay = Math.min(govtCanPay, remainLimit);
+        
+        // 3. User must pay the rest
+        const userMustPay = price - actualGovtPay;
+
+        // Display
+        walletResultEl.textContent = userMustPay.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        wTotalEl.textContent = price.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        wGovtEl.textContent = actualGovtPay.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        wFinalEl.textContent = userMustPay.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    walletPriceInput.addEventListener('input', calculateWallet);
+    remainLimitInput.addEventListener('input', calculateWallet);
+
+    // --- Help System Logic ---
+    const helpModal = document.getElementById('help-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalList = document.getElementById('modal-list');
+
+    const helpContent = {
+        calc: {
+            title: "วิธีใช้: เช็กสัดส่วนจ่าย",
+            steps: [
+                "กรอกราคาสินค้าที่คุณต้องการซื้อ",
+                "ระบบจะแยกยอด 'คุณจ่ายเอง (40%)' และ 'รัฐช่วย (60%)' ให้ทันที",
+                "สังเกตแถบวงเงิน: หากรัฐช่วยครบ 200.- แถบจะเปลี่ยนเป็นสีส้ม/แดง หมายถึงเต็มเพดานของวันนั้นแล้ว"
+            ]
+        },
+        wallet: {
+            title: "วิธีใช้: ยอดเติมเป๋าตัง",
+            steps: [
+                "กรอกราคาสินค้าที่จะซื้อ",
+                "ระบุ 'สิทธิที่เหลือจริง' (ดูได้จากหน้าแรกของแอปเป๋าตัง)",
+                "ดูยอดสีส้ม: นั่นคือจำนวนเงินที่คุณต้องเติมเข้า G-Wallet เพื่อให้เพียงพอต่อการสแกนจ่ายรอบนี้"
+            ]
+        }
+    };
+
+    function openHelp(page) {
+        const content = helpContent[page];
+        modalTitle.innerText = content.title;
+        modalList.innerHTML = content.steps.map(step => `<li><i data-lucide='check-circle-2'></i>${step}</li>`).join('');
+        helpModal.style.display = 'flex';
+        
+        // Hide hint when user clicks help
+        const hint = document.getElementById('help-hint-' + page);
+        if (hint) hint.style.display = 'none';
+
+        lucide.createIcons();
+    }
+
+    function closeHelp() {
+        helpModal.style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target == helpModal) closeHelp();
+    }
+
 </script>
 
 </body>
