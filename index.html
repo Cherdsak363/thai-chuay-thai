@@ -543,18 +543,47 @@
     let targetValues = { user: 0, govt: 0, c60: 0, c40: 0, total: 0 };
     let displayedValues = { user: 0, govt: 0, c60: 0, c40: 0, total: 0 };
 
+    // --- Page 2 Logic ---
+    const walletPriceInput = document.getElementById('wallet-price');
+    const remainLimitInput = document.getElementById('remain-limit');
+    const walletResultEl = document.getElementById('wallet-result');
+    const wTotalEl = document.getElementById('w-total');
+    const wGovtEl = document.getElementById('w-govt');
+    const wFinalEl = document.getElementById('w-final');
+
+    let targetValuesWallet = { result: 0, total: 0, govt: 0, final: 0 };
+    let displayedValuesWallet = { result: 0, total: 0, govt: 0, final: 0 };
+
     function animate() {
         const speed = 0.2;
+        
+        // Animate Page 1
         for (let key in targetValues) {
             const diff = targetValues[key] - displayedValues[key];
             if (Math.abs(diff) > 0.01) displayedValues[key] += diff * speed;
             else displayedValues[key] = targetValues[key];
         }
+        
+        // Animate Page 2
+        for (let key in targetValuesWallet) {
+            const diff = targetValuesWallet[key] - displayedValuesWallet[key];
+            if (Math.abs(diff) > 0.01) displayedValuesWallet[key] += diff * speed;
+            else displayedValuesWallet[key] = targetValuesWallet[key];
+        }
+
+        // Update Page 1 DOM
         userPayEl.textContent = displayedValues.user.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         govtPayEl.textContent = displayedValues.govt.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         calc60El.textContent = displayedValues.c60.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         calc40El.textContent = displayedValues.c40.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         totalValEl.textContent = displayedValues.total.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        // Update Page 2 DOM
+        walletResultEl.textContent = displayedValuesWallet.result.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        wTotalEl.textContent = displayedValuesWallet.total.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        wGovtEl.textContent = displayedValuesWallet.govt.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        wFinalEl.textContent = displayedValuesWallet.final.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
         requestAnimationFrame(animate);
     }
     animate();
@@ -575,14 +604,6 @@
         sweetSpotBadge.style.display = (price >= 333.30 && price <= 333.40) ? 'block' : 'none';
     });
 
-    // --- Page 2 Logic ---
-    const walletPriceInput = document.getElementById('wallet-price');
-    const remainLimitInput = document.getElementById('remain-limit');
-    const walletResultEl = document.getElementById('wallet-result');
-    const wTotalEl = document.getElementById('w-total');
-    const wGovtEl = document.getElementById('w-govt');
-    const wFinalEl = document.getElementById('w-final');
-
     function calculateWallet() {
         const price = parseFloat(walletPriceInput.value) || 0;
         const remainLimit = parseFloat(remainLimitInput.value) || 0;
@@ -597,11 +618,13 @@
         // 3. User must pay the rest
         const userMustPay = price - actualGovtPay;
 
-        // Display
-        walletResultEl.textContent = userMustPay.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        wTotalEl.textContent = price.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        wGovtEl.textContent = actualGovtPay.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        wFinalEl.textContent = userMustPay.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        // Set target values for animation
+        targetValuesWallet = { 
+            result: userMustPay, 
+            total: price, 
+            govt: actualGovtPay, 
+            final: userMustPay 
+        };
     }
 
     walletPriceInput.addEventListener('input', calculateWallet);
